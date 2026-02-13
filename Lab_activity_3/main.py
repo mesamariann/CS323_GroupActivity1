@@ -23,7 +23,7 @@ def task_parallelism(employee):
     print("│{:^{w}}│".format("PART A – TASK PARALLELISM", w=width))
     print("├" + "─" * width + "┤")
     print("│ Employee Name : {:<27}│".format(name))
-    print("│ Gross Salary  : ₱ {:<26,.2f}│".format(salary))
+    print("│ Gross Salary  : ₱ {:<25,.2f}│".format(salary))
     print("└" + "─" * width + "┘")
 
     with ThreadPoolExecutor(max_workers=4) as executor:
@@ -52,16 +52,23 @@ def compute_payroll(employee):
 
 
 def data_parallelism(employees):
-    print("\nPART B – DATA PARALLELISM")
+    width = 44
+
+    print("\n" + "┌" + "─" * width + "┐")
+    print("│{:^{w}}│".format("PART B – DATA PARALLELISM", w=width))
+    print("└" + "─" * width + "┘")
 
     with ProcessPoolExecutor() as executor:
         results = executor.map(compute_payroll, employees)
 
         for name, salary, total, net in results:
-            print("\nEmployee Name:", name)
-            print("Gross Salary:", salary)
-            print("Total Deduction:", total)
-            print("Net Salary:", net)
+            print("\n" + "┌" + "─" * width + "┐")
+            print("│ Employee Name : {:<27}│".format(name))
+            print("├" + "─" * width + "┤")
+            print("│ Gross Salary  : ₱{:>26,.2f}│".format(salary))
+            print("│ Total Deduct. : ₱{:>26,.2f}│".format(total))
+            print("│ Net Salary    : ₱{:>26,.2f}│".format(net))
+            print("└" + "─" * width + "┘")
 
 
 # MAIN
