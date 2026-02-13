@@ -17,10 +17,14 @@ def compute_tax(salary):
 # PART A – TASK PARALLELISM
 def task_parallelism(employee):
     name, salary = employee
+    width = 44
 
-    print("\nPART A – TASK PARALLELISM")
-    print("Employee Name:", name)
-    print("Gross Salary:", salary)
+    print("\n" + "┌" + "─" * width + "┐")
+    print("│{:^{w}}│".format("PART A – TASK PARALLELISM", w=width))
+    print("├" + "─" * width + "┤")
+    print("│ Employee Name : {:<27}│".format(name))
+    print("│ Gross Salary  : ₱{:>14,.2f}            │".format(salary))
+    print("└" + "─" * width + "┘")
 
     with ThreadPoolExecutor(max_workers=4) as executor:
         deductions = {
@@ -34,9 +38,9 @@ def task_parallelism(employee):
         for label, future in deductions.items():
             amount = future.result()
             total += amount
-            print(label, ":", amount)
+            print(f"{label:<12}: ₱{amount:,.2f}")
 
-        print("Total Deduction:", total)
+        print(f"{'Total Deduction':<12}: ₱{total:,.2f}")
 
 
 # PART B – DATA PARALLELISM
