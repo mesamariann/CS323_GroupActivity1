@@ -70,3 +70,21 @@ was written at a time and producing a complete, consistent final list.
 ## Galendez
 
 ## Panandigan
+1. **How did you distribute orders among worker processes?**
+> Task allocation was coordinated centrally, with jobs forwarded to different processing units through MPI communication calls. Instead of concentrating execution on one unit, the system rotated assignments across multiple processors to balance the workload more effectively.
+
+2. **What happens if there are more orders than workers?**
+> If the quantity of incoming orders is greater than the active processing units, each unit handles several jobs sequentially rather than only one. After completing a task, the processor immediately continues with another pending assignment, allowing all requests to be completed while preventing unprocessed entries.
+
+3. **How did processing delays affect order completion?**
+> Variations in execution time caused certain processing units to complete their workloads sooner than others. As a result, finished tasks were returned in a different sequence from the one used during the initial distribution phase.
+
+4. **How did you implement shared memory, and where was it initialized?**
+> A common data structure was established to act as shared storage for finalized tasks once processing was completed. This container was prepared by the coordinating process prior to receiving outputs from the worker nodes, allowing incoming results to be gathered in a centralized location. By maintaining a unified repository, the system could efficiently organize processed entries, simplify result tracking, and ensure that all completed operations were available for later review or reporting.
+
+5. **What issues occurred when multiple workers wrote to shared memory?**
+> When several worker processes attempted to write their outputs to the shared storage simultaneously without synchronization control, race conditions occurred. Because access to the shared resource was unmanaged, the system produced inconsistent results, which sometimes caused missing or corrupted entries in the list.
+
+6. **How did you ensure consistent results?**
+> Without synchronization mechanisms in place, concurrent result submissions from multiple worker processes created race conditions within the shared storage. As a consequence, unpredictable system behavior occurred, leading to inconsistent data and the possible loss of some recorded entries.
+
